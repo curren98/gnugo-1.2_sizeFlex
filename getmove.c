@@ -34,7 +34,7 @@ Please report any bug/fix, modification, suggestion to
 #include "gnugo.h"
 
 extern unsigned int sz;
-extern unsigned char p[sz][sz];  /* go board */
+extern unsigned char **p;  /* go board */
 extern int mymove, umove;        /* computer color, opponent color */
 extern int play;                 /* game state */
 extern int pass;                 /* pass indicator */

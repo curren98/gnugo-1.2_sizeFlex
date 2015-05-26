@@ -33,8 +33,8 @@ Please report any bug/fix, modification, suggestion to
 #include "gnugo.h"
 
 extern unsigned int sz;
-extern unsigned char p[sz][sz];   /* go board */
-extern unsigned char ma[sz][sz];  /* working matrix for marking */
+extern unsigned char **p;   /* go board */
+extern unsigned char **ma;  /* working matrix for marking */
 extern int mik, mjk;  /* location of computer stone captured */
 
 int findopen(int m,      /* current row number 0 to 18 */

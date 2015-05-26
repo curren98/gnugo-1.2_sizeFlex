@@ -33,7 +33,7 @@ Please report any bug/fix, modification, suggestion to
 #include "gnugo.h"
 
 extern unsigned int sz;
-extern unsigned char ml[sz][sz];  /* working matrix for marking */
+extern unsigned char **ml;  /* working matrix for marking */
 
 void countlib(int m,     /* row number 0 to 18 */
               int n,     /* column number 0 to 18 */

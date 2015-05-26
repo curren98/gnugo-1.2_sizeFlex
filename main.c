@@ -36,10 +36,10 @@ Please report any bug/fix, modification, suggestion to
 
 unsigned int sz = 19;  /* board size **/
 
-unsigned char p[sz][sz];  /* go board */
-unsigned char l[sz][sz];  /* liberty of current color */
-unsigned char ma[sz][sz]; /* working matrix for marking */
-unsigned char ml[sz][sz]; /* working matrix for marking */
+unsigned char **p;  /* go board */
+unsigned char **l;  /* liberty of current color */
+unsigned char **ma; /* working matrix for marking */
+unsigned char **ml; /* working matrix for marking */
 int mymove, umove;        /* computer color, opponent color */
 int lib;                  /* current stone liberty */
 int play;                 /* game state */
@@ -57,6 +57,13 @@ int main(int argc,
    char move[10], ans[5];
    int cont = 0;
    time_t tm;
+   
+   /* allocate arrays dynamic **/
+   /* todo: continue‚Ì‚Æ‚«‚Ígnugo.dat‚©‚çsz‚Ìvalue‚ð“Ç‚ÝŽæ‚Á‚½Œã‚Éallocate‚·‚é **/
+   p = (unsigned char **)calloc(sizeof(char), sz*sz);
+   l = (unsigned char **)calloc(sizeof(char), sz*sz);
+   ma = (unsigned char **)calloc(sizeof(char), sz*sz);
+   ml = (unsigned char **)calloc(sizeof(char), sz*sz);
 
 /* show instruction */
    showinst();

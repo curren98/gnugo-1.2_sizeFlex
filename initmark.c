@@ -32,7 +32,7 @@ Please report any bug/fix, modification, suggestion to
 #include "gnugo.h"
 
 extern unsigned int sz;
-extern unsigned char ma[sz][sz];  /* working matrix for marking */
+extern unsigned char **ma;  /* working matrix for marking */
 
 void initmark(void)
 /* initialize all marking with zero */

@@ -32,8 +32,8 @@ Please report any bug/fix, modification, suggestion to
 #include "gnugo.h"
 
 extern unsigned int sz;
-extern unsigned char p[sz][sz];  /* go board */
-extern unsigned char l[sz][sz];  /* liberty of current color */
+extern unsigned char **p;  /* go board */
+extern unsigned char **l;  /* liberty of current color */
 extern int mymove, umove;        /* computer color, opponent color */
 extern int lib;                  /* current stone liberty */
 extern int uik, ujk;             /* location of opponent stone captured */

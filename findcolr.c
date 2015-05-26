@@ -33,7 +33,7 @@ Please report any bug/fix, modification, suggestion to
 #include "gnugo.h"
 
 extern unsigned int sz;
-extern unsigned char p[sz][sz];   /* go board */
+extern unsigned char **p;   /* go board */
 
 unsigned int findcolor(int i,   /* row number 0 to 18 */
                        int j)   /* column number 0 to 18 */

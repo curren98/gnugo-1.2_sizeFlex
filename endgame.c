@@ -42,11 +42,11 @@ Please report any bug/fix, modification, suggestion to
 
 
 extern unsigned int sz;
-extern unsigned char p[sz][sz];   /* go board */
+extern unsigned char **p;   /* go board */
 extern int mymove, umove;         /* computer color, opponent color */
 extern int mk, uk;    /* no. of stones captured by computer and oppoent */
 
-int que[QSIZE],color[sz*sz],listpt[sz*sz];
+int que[QSIZE],*color,*listpt;
 int *pe, *pstart;
 int endq=0;
 int queinit=0;
@@ -182,8 +182,13 @@ void endgame(void)
 {
   char an[10];
   int i, j, k, N, mtot, utot, cont;
-  int mymovelist[sz*sz][5];
-  int umovelist[sz*sz][5];
+  int **mymovelist;
+  int **umovelist;
+  
+  color = (int *)calloc(sizeof(int), sz*sz);
+  listpt = (int *)calloc(sizeof(int), sz*sz);
+  mymovelist = (int **)calloc(sizeof(int), sz*sz*5);
+  umovelist = (int **)calloc(sizeof(int), sz*sz*5);
 
   printf("\nTo count score, we need the following steps:\n");
   printf("First, I need you to remove all dead pieces on the board.\n");
