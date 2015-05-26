@@ -31,7 +31,8 @@ Please report any bug/fix, modification, suggestion to
 
 #include "gnugo.h"
 
-extern unsigned char p[19][19];   /* go board */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];   /* go board */
 
 void sethand(int i)
 /* set up handicap pieces */
@@ -41,45 +42,45 @@ void sethand(int i)
     p[3][3] = BLACK;
     if (i > 1)
       {
-       p[15][15] = BLACK;
+       p[sz-3-1][sz-3-1] = BLACK;
        if (i > 2)
 	 {
-	  p[3][15] = BLACK;
+	  p[3][sz-3-1] = BLACK;
 	  if (i > 3)
 	    {
-	     p[15][3] = BLACK;
+	     p[sz-3-1][3] = BLACK;
 	     if (i == 5)
-		p[9][9] = BLACK;
+		p[sz/2][sz/2] = BLACK;
 	     else
 		if (i > 5)
 		  {
-		   p[9][15] = BLACK;
-		   p[9][3] = BLACK;
+		   p[sz/2][sz-3-1] = BLACK;
+		   p[sz/2][3] = BLACK;
 		   if (i == 7)
-		      p[9][9] = BLACK;
+		      p[sz/2][sz/2] = BLACK;
 		   else
 		      if (i > 7)
 			{
-			 p[15][9] = BLACK;
-			 p[3][9] = BLACK;
+			 p[sz-3-1][sz/2] = BLACK;
+			 p[3][sz/2] = BLACK;
 			 if (i > 8)
-			 p[9][9] = BLACK;
+			 p[sz/2][sz/2] = BLACK;
  			 if (i > 9)
  			   {p[2][2] = 2;
  			    if (i > 10)
- 			      {p[16][16] = 2;
+ 			      {p[sz-3][sz-3] = 2;
  			       if (i > 11)
- 				 {p[2][16] = 2;
+ 				 {p[2][sz-3] = 2;
  				  if (i > 12)
- 				    {p[16][2] = 2;
+ 				    {p[sz-3][2] = 2;
  				     if (i > 13)
  				       {p[6][6] = 2;
  					if (i > 14)
- 					  {p[12][12] = 2;
+ 					  {p[sz-3][sz-3] = 2;
  					   if (i > 15)
- 					     {p[6][12] = 2;
+ 					     {p[6][sz-3] = 2;
  					      if (i > 16)
- 						p[12][6] = 2;
+ 						p[sz-3][6] = 2;
  					    }
  					 }
  				      }

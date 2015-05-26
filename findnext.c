@@ -32,8 +32,9 @@ Please report any bug/fix, modification, suggestion to
 
 #include "gnugo.h"
 
-extern unsigned char p[19][19];   /* go board */
-extern unsigned char ma[19][19];  /* working matrix for marking */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];   /* go board */
+extern unsigned char ma[sz][sz];  /* working matrix for marking */
 extern int mymove;                /* computer color */
 extern int lib;                   /* liberty of current stone */
 
@@ -82,7 +83,7 @@ int findnextmove(int m,       /* current stone row number */
    }
 
 /* check South neighbor */
-  if (m != 18)
+  if (m != sz - 1)
      if (p[m + 1][n] == EMPTY)
       {
        ti = m + 1;
@@ -136,7 +137,7 @@ int findnextmove(int m,       /* current stone row number */
    }
 
 /* check East neighbor */
-  if (n != 18)
+  if (n != sz - 1)
      if (p[m][n + 1] == EMPTY)
       {
        ti = m;

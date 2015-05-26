@@ -32,7 +32,8 @@ Please report any bug/fix, modification, suggestion to
 
 #include "gnugo.h"
 
-extern unsigned char p[19][19];   /* go board */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];   /* go board */
 
 unsigned int findcolor(int i,   /* row number 0 to 18 */
                        int j)   /* column number 0 to 18 */
@@ -58,10 +59,10 @@ if (p[i][j] != EMPTY) return p[i][j];
 
 /* check South neighbor */
    
-   if (i<18) {
+   if (i<sz-1) {
      k = i;
      do ++k;
-     while ((p[k][j] == EMPTY) && (k < 18));
+     while ((p[k][j] == EMPTY) && (k < sz - 1));
      color[1] = p[k][j];
    }
    else color[1] = p[i][j];
@@ -76,10 +77,10 @@ if (p[i][j] != EMPTY) return p[i][j];
    else color[2] = p[i][j];
 
 /* check East neighbor */
-   if (j<18) {
+   if (j<sz-1) {
      k = j;
      do ++k;
-     while ((p[i][k] == EMPTY) && (k < 18));
+     while ((p[i][k] == EMPTY) && (k < sz - 1));
      color[3] = p[i][k];
    }
    else color[3] = p[i][j];

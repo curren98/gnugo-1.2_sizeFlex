@@ -34,10 +34,12 @@ Please report any bug/fix, modification, suggestion to
 #include <time.h>
 #include "gnugo.h"
 
-unsigned char p[19][19];  /* go board */
-unsigned char l[19][19];  /* liberty of current color */
-unsigned char ma[19][19]; /* working matrix for marking */
-unsigned char ml[19][19]; /* working matrix for marking */
+unsigned int sz = 19;  /* board size **/
+
+unsigned char p[sz][sz];  /* go board */
+unsigned char l[sz][sz];  /* liberty of current color */
+unsigned char ma[sz][sz]; /* working matrix for marking */
+unsigned char ml[sz][sz]; /* working matrix for marking */
 int mymove, umove;        /* computer color, opponent color */
 int lib;                  /* current stone liberty */
 int play;                 /* game state */
@@ -64,8 +66,8 @@ int main(int argc,
       cont = 1;
 
 /* read board configuration */
-      for (i = 0; i < 19; i++)
-        for (j = 0; j < 19; j++)
+      for (i = 0; i < sz; i++)
+        for (j = 0; j < sz; j++)
           fscanf(fp, "%c", &p[i][j]);
 
 /* read my color, pieces captured */
@@ -88,8 +90,8 @@ int main(int argc,
       opn[4] = 0;
 
 /* init board */
-      for (i = 0; i < 19; i++)
-        for (j = 0; j < 19; j++)
+      for (i = 0; i < sz; i++)
+        for (j = 0; j < sz; j++)
           p[i][j] = EMPTY;
 /* init global variables */
       mk = 0;  uk = 0;

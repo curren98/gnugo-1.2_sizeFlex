@@ -31,8 +31,9 @@ Please report any bug/fix, modification, suggestion to
 
 #include "gnugo.h"
 
-extern unsigned char p[19][19];   /* go board */
-extern unsigned char l[19][19];   /* liberty of current color */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];   /* go board */
+extern unsigned char l[sz][sz];   /* liberty of current color */
 extern int mymove, umove;         /* computer color, opponent color */
 extern int lib;                   /* current stone liberty */
 
@@ -46,8 +47,8 @@ int findwinner(int *i,    /* row number of next move */
  *i = -1;   *j = -1;   *val = -1;
 
 /* find opponent with liberty less than four */
- for (m = 0; m < 19; m++)
-   for (n = 0; n < 19; n++)
+ for (m = 0; m < sz; m++)
+   for (n = 0; n < sz; n++)
      if ((p[m][n] == umove) && (l[m][n] < 4))
        {
 	ct = 0;

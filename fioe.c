@@ -31,7 +31,8 @@ Please report any bug/fix, modification, suggestion to
 
 #include "gnugo.h"
 
-extern unsigned char p[19][19];   /* go board */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];   /* go board */
 extern int mymove;                /* computer color */
 
 int fioe(int i,   /* stone row number 0 to 18 */
@@ -41,19 +42,19 @@ int fioe(int i,   /* stone row number 0 to 18 */
  if (i == 0)
    {
     if ((j == 0) && ((p[1][0] == mymove) && (p[0][1] == mymove))) return 1;
-    if ((j == 18) && ((p[1][18] == mymove) && (p[0][17] == mymove))) return 1;
+    if ((j == sz-1) && ((p[1][sz-1] == mymove) && (p[0][sz-2] == mymove))) return 1;
     if ((p[1][j] == mymove) &&
 	((p[0][j - 1] == mymove) && (p[0][j + 1] == mymove))) return 1;
     else
        return 0;
   }
 /* check bottom edge */
- if (i == 18)
+ if (i == sz-1)
    {
-    if ((j == 0) && ((p[17][0] == mymove) && (p[18][1] == mymove))) return 1;
-    if ((j == 18) && ((p[17][18] == mymove) && (p[18][17] == mymove))) return 1;
-    if ((p[17][j] == mymove) &&
-	((p[18][j - 1] == mymove) && (p[18][j + 1] == mymove)))
+    if ((j == 0) && ((p[sz-2][0] == mymove) && (p[sz-1][1] == mymove))) return 1;
+    if ((j == sz-1) && ((p[sz-2][sz-1] == mymove) && (p[sz-1][sz-2] == mymove))) return 1;
+    if ((p[sz-2][j] == mymove) &&
+	((p[sz-1][j - 1] == mymove) && (p[sz-1][j + 1] == mymove)))
        return 1;
     else
        return 0;
@@ -66,9 +67,9 @@ int fioe(int i,   /* stone row number 0 to 18 */
     else
        return 0;
 /* check right edge */
- if (j == 18)
-    if ((p[i][17] == mymove) &&
-	((p[i - 1] [18] == mymove) && (p[i + 1][18] == mymove)))
+ if (j == sz-1)
+    if ((p[i][sz-2] == mymove) &&
+	((p[i - 1] [sz-1] == mymove) && (p[i + 1][sz-1] == mymove)))
        return 1;
     else
        return 0;

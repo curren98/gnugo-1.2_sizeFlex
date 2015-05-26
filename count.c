@@ -32,8 +32,9 @@ Please report any bug/fix, modification, suggestion to
 
 #include "gnugo.h"
 
-extern unsigned char p[19][19];   /* go board */
-extern unsigned char ml[19][19];  /* working matrix for marking */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];   /* go board */
+extern unsigned char ml[sz][sz];  /* working matrix for marking */
 extern int lib;                   /* current stone liberty */
 
 void count(int i,     /* row number 0 to 18 */
@@ -58,7 +59,7 @@ void count(int i,     /* row number 0 to 18 */
 	  count(i - 1, j, color);
   }
 /* check South neighbor */
- if (i != 18)
+ if (i != sz - 1)
    {
     if ((p[i + 1][j] == EMPTY) && ml[i + 1][j])
       {
@@ -82,7 +83,7 @@ void count(int i,     /* row number 0 to 18 */
 	  count(i, j - 1, color);
   }
 /* check East neighbor */
- if (j != 18)
+ if (j != sz - 1)
    {
     if ((p[i][j + 1] == EMPTY) && ml[i][j + 1])
       {

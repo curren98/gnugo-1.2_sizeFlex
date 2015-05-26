@@ -35,7 +35,8 @@ Please report any bug/fix, modification, suggestion to
 
 #define MAXTRY 400
 
-extern unsigned char p[19][19];   /* go board */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];   /* go board */
 extern int mymove, umove;         /* computer color, opponent color */
 extern int lib;                   /* current stone liberty */
 extern int pass;                  /* pass indicator */
@@ -85,25 +86,25 @@ void genmove(int *i,
 /* no urgent move then do random move */
    if (val < 0)
        do {
-	   *i = rand() % 19;
+	   *i = rand() % sz;
 
 /* avoid low line  and center region */
-	   if ((*i < 2) || (*i > 16) || ((*i > 5) && (*i < 13)))
+	   if ((*i < 2) || (*i > sz-3) || ((*i > 5) && (*i < sz-6)))
 	     {
-	      *i = rand() % 19;
-	      if ((*i < 2) || (*i > 16))
-                *i = rand() % 19;
+	      *i = rand() % sz;
+	      if ((*i < 2) || (*i > sz-3))
+                *i = rand() % sz;
 	    }
 
-           *j = rand() % 19;
+           *j = rand() % sz;
 
 /* avoid low line and center region */
-	   if ((*j < 2) || (*j > 16) || ((*j > 5) && (*j < 13)))
+	   if ((*j < 2) || (*j > sz-3) || ((*j > 5) && (*j < sz-6)))
 	     {
-              *j = rand() % 19;
+              *j = rand() % sz;
 
-	      if ((*j < 2) || (*j > 16))
-                *j = rand() % 19;
+	      if ((*j < 2) || (*j > sz-3))
+                *j = rand() % sz;
 
 	    }
 	    lib = 0;
@@ -128,7 +129,7 @@ void genmove(int *i,
       else
 	 a = *j + 66;
       printf("%c", a);
-      ii = 19 - *i;
+      ii = sz - *i;
       if (ii < 10)
 	 printf("%1d\n", ii);
       else

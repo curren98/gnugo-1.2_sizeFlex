@@ -33,9 +33,10 @@ Please report any bug/fix, modification, suggestion to
 #include "patterns.h"
 
 #define abs(x) ((x) < 0 ? -(x) : (x))
-#define line(x) (abs(x - 9))
+#define line(x) (abs(x - sz/2))
 
-extern unsigned char p[19][19];   /* go board */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];   /* go board */
 extern int mymove, umove;         /* computer color, opponent color */
 extern int lib;                   /* current stone liberty */
 
@@ -77,7 +78,7 @@ int matchpat(int m,     /* row origin */
 		 + trf[ll][1][1] * pat[r].patn[k].y;
 
 /* outside the board */
-	  if ((my < 0) || ( my > 18) || (nx < 0) || (nx > 18))
+	  if ((my < 0) || ( my > sz-1) || (nx < 0) || (nx > sz-1))
 	    {
 	     cont = 0;
 	     break;
@@ -126,7 +127,7 @@ int matchpat(int m,     /* row origin */
 		      break;
 		    }
 	  case 4 : if ((p[my][nx] == EMPTY)  /* open on edge */
-		       && ((my == 0) || (my == 18) || (nx == 0) || (nx == 18)))
+		       && ((my == 0) || (my == sz-1) || (nx == 0) || (nx == sz-1)))
 		      break;
 		   else
 		     {
@@ -134,7 +135,7 @@ int matchpat(int m,     /* row origin */
 		      break;
 		    }
 	  case 5 : if ((p[my][nx] == umove)  /* your piece on edge */
-		       && ((my == 0) || (my == 18) || (nx == 0) || (nx == 18)))
+		       && ((my == 0) || (my == sz-1) || (nx == 0) || (nx == sz-1)))
 		      break;
 		   else
 		     {
@@ -142,7 +143,7 @@ int matchpat(int m,     /* row origin */
 		      break;
 		    }
 	  case 6 : if ((p[my][nx] == mymove)  /* my piece on edge */
-		       && ((my == 0) || (my == 18) || (nx == 0) || (nx == 18)))
+		       && ((my == 0) || (my == sz-1) || (nx == 0) || (nx == sz-1)))
 		      break;
 		   else
 		     {
@@ -157,16 +158,16 @@ int matchpat(int m,     /* row origin */
 	    tval = pat[r].patwt;
 	    if ((r >= 8) && (r <= 13))	/* patterns for expand region */
 	      {
-	       if (line(ti) > 7)  /* penalty on line 1, 2 */
+	       if (line(ti) > sz/2 - 2)  /* penalty on line 1, 2 */ /* 7 in board19 **/
 		  tval--;
 	       else
-		  if ((line(ti) == 6) || (line(ti) == 7))
+		  if ((line(ti) == sz/2 - 3) || (line(ti) == sz/2 - 2))
 		     tval++;	/* reward on line 3, 4 */
 
-	       if (line(tj) > 7)  /* penalty on line 1, 2 */
+	       if (line(tj) > sz/2 - 2)  /* penalty on line 1, 2 */
 		  tval--;
 	       else
-		  if ((line(tj) == 6) || (line(tj) == 7))
+		  if ((line(tj) == sz/2 - 3) || (line(tj) == sz/2 - 2))
 		     tval++;	/* reward on line 3, 4 */
 	     }
 	    if (tval > *val)

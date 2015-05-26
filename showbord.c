@@ -32,7 +32,8 @@ Please report any bug/fix, modification, suggestion to
 #include <stdio.h>
 #include "gnugo.h"
 
-extern unsigned char p[19][19];   /* go board */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];   /* go board */
 extern int mymove, umove;         /* computer color, opponent color */
 extern int mk, uk;    /* no. of stones captured by computer and oppoent */
 
@@ -44,12 +45,13 @@ void showboard(void)
 /* p = 0 for empty ,p = 1 for white piece, p = 2 for black piece */
    printf("   A B C D E F G H J K L M N O P Q R S T\n");
 /* row 19 to 17 */
-   for (i = 0; i < 3; i++)
+/* for simplify, logic for drawing stars are omitted. **/
+   for (i = 0; i < sz; i++)
      {
-      ii = 19 - i;
+      ii = sz - i;
       printf("%2d",ii);
 
-      for (j = 0; j < 19; j++)
+      for (j = 0; j < sz; j++)
 	if (p[i][j] == EMPTY)
 	   printf(" -");
 	else if (p[i][j] == WHITE)
@@ -59,6 +61,8 @@ void showboard(void)
       printf("%2d",ii);
       printf("\n");
      }
+/* for simplify, logic for drawing stars are omitted. **/
+#if 0
 /* row 16 */
    printf("16");
 
@@ -280,5 +284,6 @@ void showboard(void)
       printf("%2d",ii);
       printf("\n");
      }
+#endif
    printf("   A B C D E F G H J K L M N O P Q R S T\n\n");
  }  /* end showboard */

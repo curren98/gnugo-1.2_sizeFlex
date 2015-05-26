@@ -31,8 +31,9 @@ Please report any bug/fix, modification, suggestion to
 
 #include "gnugo.h"
 
-extern unsigned char p[19][19];   /* go board */
-extern unsigned char l[19][19];   /* liberty of current color */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];   /* go board */
+extern unsigned char l[sz][sz];   /* liberty of current color */
 extern int mymove;                /* computer color */
 
 int findsaver(int *i,    /* row number of next move */
@@ -47,8 +48,8 @@ int findsaver(int *i,    /* row number of next move */
    for (minlib = 1; minlib < 4; minlib++)
       {
 /* count piece with minimum liberty */
-       for (m = 0; m < 19; m++)
-	 for (n = 0; n < 19; n++)
+       for (m = 0; m < sz; m++)
+	 for (n = 0; n < sz; n++)
 	   if ((p[m][n] == mymove) && (l[m][n] == minlib))
 /* find move to save pieces */
 	     {

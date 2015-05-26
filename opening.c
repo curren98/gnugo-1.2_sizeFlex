@@ -32,6 +32,8 @@ Please report any bug/fix, modification, suggestion to
 #include <stdlib.h>
 #include "gnugo.h"
 
+extern unsigned int sz;
+
 int opening(int *i,
             int *j,
             int *cnd,
@@ -69,11 +71,11 @@ int m;
 
 /* get i, j */
  if ((type == 1) || (type == 3))
-    *i = 18 - tree[*cnd].i;   /* inverted */
+    *i = sz-1 - tree[*cnd].i;   /* inverted */
  else
     *i = tree[*cnd].i;
  if ((type == 2) || (type == 3))
-    *j = 18 - tree[*cnd].j;   /* reflected */
+    *j = sz-1 - tree[*cnd].j;   /* reflected */
  else
     *j = tree[*cnd].j;
  if (tree[*cnd].ndct)  /* more move */

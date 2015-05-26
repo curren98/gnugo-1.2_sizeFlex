@@ -33,7 +33,8 @@ Please report any bug/fix, modification, suggestion to
 #include <string.h>
 #include "gnugo.h"
 
-extern unsigned char p[19][19];  /* go board */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];  /* go board */
 extern int mymove, umove;        /* computer color, opponent color */
 extern int play;                 /* game state */
 extern int pass;                 /* pass indicator */
@@ -58,8 +59,8 @@ void getmove(char move[],  /* move string */
 	{
 	 fp = fopen("gnugo.dat", "w");
 /* save board configuration */
-	 for (m = 0; m < 19; m++)
-	   for (n = 0; n < 19; n++)
+	 for (m = 0; m < sz; m++)
+	   for (n = 0; n < sz; n++)
 	       fprintf(fp, "%c", p[m][n]);
 /* my color, pieces captured */
          fprintf(fp, "%d %d %d ", mymove, mk, uk);

@@ -31,14 +31,15 @@ Please report any bug/fix, modification, suggestion to
 
 #include "gnugo.h"
 
-extern unsigned char ma[19][19];  /* working matrix for marking */
+extern unsigned int sz;
+extern unsigned char ma[sz][sz];  /* working matrix for marking */
 
 void initmark(void)
 /* initialize all marking with zero */
 {
 int i, j;
 
-  for (i = 0; i < 19; i++)
-    for (j = 0; j < 19; j++)
+  for (i = 0; i < sz; i++)
+    for (j = 0; j < sz; j++)
       ma[i][j] = 0;
 }  /* end initmark */

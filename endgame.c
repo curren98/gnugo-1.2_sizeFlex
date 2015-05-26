@@ -34,18 +34,19 @@ Please report any bug/fix, modification, suggestion to
 #include <string.h>
 #include "gnugo.h"
 
-#define BSIZE 19
-#define NODES BSIZE*BSIZE
+#define BSIZE 19            /* use variable "sz" instead **/
+#define NODES BSIZE*BSIZE   /* use variable "sz" instead **/
 #define ENDLIST 1000
 #define QSIZE 150
 #define GREY  3
 
 
-extern unsigned char p[19][19];   /* go board */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];   /* go board */
 extern int mymove, umove;         /* computer color, opponent color */
 extern int mk, uk;    /* no. of stones captured by computer and oppoent */
 
-int que[QSIZE],color[BSIZE*BSIZE],listpt[BSIZE*BSIZE];
+int que[QSIZE],color[sz*sz],listpt[sz*sz];
 int *pe, *pstart;
 int endq=0;
 int queinit=0;
@@ -56,14 +57,14 @@ void node2ij(int node,
              int *j)
 /* Converts a node number back to an i,j pair. */
 {
-   *i = node/BSIZE;
-   *j = node%BSIZE;
+   *i = node/sz;
+   *j = node%sz;
 }
 
 int node(int i,
          int j)
 {
-  return i*BSIZE+j;
+  return i*sz+j;
 }
 
 void createlist(int color,
@@ -74,8 +75,8 @@ void createlist(int color,
 {
   int i, j, k, m;
 
-  for (i=0;i<BSIZE;i++) {
-   for (j=0;j<BSIZE;j++) {
+  for (i=0;i<sz;i++) {
+   for (j=0;j<sz;j++) {
      k=0;
      if (p[i][j]==color) {
      /* check up */
@@ -86,14 +87,14 @@ void createlist(int color,
          }
        }
        /* check right */ 
-       if ( j < ( BSIZE -1 ) ) { 
+       if ( j < ( sz -1 ) ) { 
          if ( p[i][j+1] == color ) {
            movelist[node(i,j)][k]=node(i,j+1);
            k++;
          }
        }
        /* check down */
-       if ( i < ( BSIZE - 1) ) {
+       if ( i < ( sz - 1) ) {
          if ( p[i+1][j] == color ) {
            movelist[node(i,j)][k]=node(i+1,j);
            k++;
@@ -148,7 +149,7 @@ int  bfslist(int i,
   int k,u,v;
   int w=0;
 
-  for (k=0;k<(BSIZE*BSIZE);k++) color[k]=WHITE; /* initialization */
+  for (k=0;k<(sz*sz);k++) color[k]=WHITE; /* initialization */
   color[node(i,j)] = GREY;
   u=node(i,j);
   enqueue(&u);
@@ -181,8 +182,8 @@ void endgame(void)
 {
   char an[10];
   int i, j, k, N, mtot, utot, cont;
-  int mymovelist[NODES][5];
-  int umovelist[NODES][5];
+  int mymovelist[sz*sz][5];
+  int umovelist[sz*sz][5];
 
   printf("\nTo count score, we need the following steps:\n");
   printf("First, I need you to remove all dead pieces on the board.\n");
@@ -286,15 +287,15 @@ printf("Just before second bfslist.\n");
    while (cont);
 
 /* set empty to side they belong to */
-   for (i = 0; i < 19; i++)
-      for (j = 0; j < 19; j++)
+   for (i = 0; i < sz; i++)
+      for (j = 0; j < sz; j++)
  	if (p[i][j] == EMPTY)
  	   p[i][j] = findcolor(i, j);
 
 /* count total */
   mtot = 0;  utot = 0;
-  for (i = 0; i < 19; i++)
-     for (j = 0; j < 19; j++)
+  for (i = 0; i < sz; i++)
+     for (j = 0; j < sz; j++)
 	if (p[i][j] == mymove)
 	  ++mtot;
 	else

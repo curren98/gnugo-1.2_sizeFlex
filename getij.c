@@ -31,6 +31,8 @@ Please report any bug/fix, modification, suggestion to
 
 #include "gnugo.h"
 
+extern unsigned int sz;
+
 int getij(char move[],   /* move string */
           int *i,        /* move row number */
           int *j)        /* move column number */
@@ -53,8 +55,8 @@ int getij(char move[],   /* move string */
 	     return 0;
  k = move[1] - '0';
  if (move[2]) k = k * 10 + move[2] - '0';
- *i = 19 - k;
- if ((*i >= 0) && (*i <= 18))
+ *i = sz - k;
+ if ((*i >= 0) && (*i <= sz-1))
     return 1;
  else
     return 0;

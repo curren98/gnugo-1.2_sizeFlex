@@ -32,8 +32,9 @@ Please report any bug/fix, modification, suggestion to
 
 #include "gnugo.h"
 
-extern unsigned char p[19][19];   /* go board */
-extern unsigned char l[19][19];   /* liberty of current color */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];   /* go board */
+extern unsigned char l[sz][sz];   /* liberty of current color */
 extern int mymove;                /* computer color */
 extern int mik, mjk;  /* location of computer stone captured */
 extern int uik, ujk;  /* location of opponent stone captured */
@@ -61,8 +62,8 @@ void examboard(int color) /* BLACK or WHITE */
    n = 0; /* The number of captures this move for Ko purposes */
 
 /* remove all piece of zero liberty */
-   for (i = 0; i < 19; i++)
-     for (j = 0; j < 19; j++)
+   for (i = 0; i < sz; i++)
+     for (j = 0; j < sz; j++)
        if ((p[i][j] == color) && (l[i][j] == 0))
 	 {
 	  p[i][j] = EMPTY;

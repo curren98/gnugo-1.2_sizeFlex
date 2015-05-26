@@ -32,8 +32,9 @@ Please report any bug/fix, modification, suggestion to
 
 #include "gnugo.h"
 
-extern unsigned char p[19][19];   /* go board */
-extern unsigned char ma[19][19];  /* working matrix for marking */
+extern unsigned int sz;
+extern unsigned char p[sz][sz];   /* go board */
+extern unsigned char ma[sz][sz];  /* working matrix for marking */
 extern int mik, mjk;  /* location of computer stone captured */
 
 int findopen(int m,      /* current row number 0 to 18 */
@@ -65,7 +66,7 @@ int findopen(int m,      /* current row number 0 to 18 */
   }
 
 /* check South neighbor */
- if (m != 18)
+ if (m != sz - 1)
    {
     if ((p[m + 1][n] == EMPTY) && (((m + 1) != mik) || (n != mjk)))
       {
@@ -97,7 +98,7 @@ int findopen(int m,      /* current row number 0 to 18 */
   }
 
 /* check East neighbor */
- if (n != 18)
+ if (n != sz - 1)
    {
     if ((p[m][n + 1] == EMPTY) && ((m != mik) || ((n + 1) != mjk)))
       {
