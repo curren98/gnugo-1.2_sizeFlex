@@ -49,6 +49,9 @@ int uik, ujk;             /* location of opponent stone captured */
 int mk, uk;               /* no. of stones captured by computer and oppoent */
 int opn[9];               /* opening pattern flag */
 
+static int load_sgf(char *file, char *untilstr);
+
+
 int main(int argc,
          char *argv[])
   {
@@ -95,6 +98,14 @@ int main(int argc,
 /* delete file */
       remove("gnugo.dat");
     }
+   /* read SGF file (option -l) **/
+   else if (strcmp(argv[1], "-l") == 0) {
+     mymove = load_sgf(argv[2], NULL);
+     umove = 3 - mymove;
+   
+   
+   
+   }
    else
      {
 /* init opening pattern numbers to search */
@@ -193,3 +204,200 @@ int main(int argc,
 
  return 0;
  }  /* end main */
+
+
+/* === Below section copied from gnugo 2.0 =================================== **/
+
+#define OTHER_COLOR(color)  (WHITE+BLACK-(color))
+
+
+/* load an sgf file
+ * sgf file is a sequence of  <;>CMD[param]
+ * where interesting commands are
+ *   ;W[xx] : white move at xx - x=a-s, or tt=pass
+ *   ;B[xx] : black move at xx
+ *   AB[xx][yy][zz]....  add black stones
+ *   AW[xx][yy][zz]....  add white stones
+ *   HA[n]               handicap
+ *   SZ[n]               board size
+ *   
+ */
+
+/* returns color of next move : BLACK or WHITE
+ * file is the filename. until is an optional string of the form
+ * either 'L12' or '120' which tells it to stop loading at that move
+ * or move-number - when debugging, this
+ * will be a particularly bad move, and we want to know why
+ */
+
+/* modification: commented out DEBUG() function call. **/
+/* modification: declare gnugo 2.0 global variables **/
+/* modification: update gnugo 1.2 global variables (sz, p[][], etc.) **/
+/* modification: support PASS expression like B[]/W[] (cf: B[tt]/W[tt]) **/
+/* modification: commented out sgf_move_made() function call. (for -o option) **/
+
+static int load_sgf(char *file, char *untilstr)
+{
+  /* use a simple state engine : 
+
+  * 0=skipping junk, looking for ';' or 'H'
+  * 1=seen ';'  - looking for A or B/W.  A=>stays in state 1
+  * 2=seen B/W, looking for [
+  * 3=skip until ], then return to 1  (eg for PW, see P, skip to the ],  then state 1)
+  * 4=seen 'H', looking for A
+  * 5=seen 'S', looking for Z
+  */
+
+  int state=0;
+  int nextstate=0;  /* if we see AB[], we need to return to state 1, else state 0 */
+  int color=0;
+  int c,n,m;
+
+  int untilm = -1, untiln = -1;
+  int until = 9999;
+  
+  /* declare gnugo 2.0 global variables **/
+  int board_size = sz;       /* board size */
+  int movenum;               /* movenumber */
+  FILE *sgfout;  /* NULL, or file handle of sgf output file */ /* always NULL. **/
+
+
+  FILE *input = fopen(file, "r");
+  if (!input)
+  {
+    perror("Cannot open sgf file");
+    exit(1);
+  }
+
+reparse_untilstr:
+
+  if (untilstr)
+  {
+    if (*untilstr > '0' && *untilstr <= '9')
+    {
+      until = atoi(untilstr);
+      /* DEBUG(DEBUG_LOADSGF, "Loading until move %d\n", until); **/
+    }
+    else
+    {
+      untiln = *untilstr - 'A';
+      if (*untilstr >= 'I')
+	--untiln;
+
+      untilm = board_size - atoi(untilstr+1);
+      /* DEBUG(DEBUG_LOADSGF,"Loading until move at %d,%d (%m)\n", untilm, untiln, untilm, untiln); **/
+    }
+  }
+
+
+  while (((c=getc(input))!=EOF)) {
+
+    switch (state) {
+    case 0:
+      if (c==';') state=1;
+      if (c=='H') state=4;
+      if (c=='S') state=5;
+      break;
+
+    case 1:
+        if (c=='P' || c=='C' || c=='G' || c == 'H' || c=='F' || c=='S' || c=='K' || c=='D' || c=='T') state=3;
+	else if (c=='A') nextstate=1;
+	else if ((c=='B')||(c=='W')) {
+	  if (c=='B') color=BLACK;
+	  if (c=='W') color=WHITE;
+	  state=2;
+	}
+	break;
+
+    case 2:
+      if (c=='L') state=0;
+      else if (c=='[') {
+	n=getc(input)-'a';
+	m=getc(input)-'a';
+	
+	/* modification: support PASS expression like B[];/W[]; (cf: B[tt]/W[tt]) **/
+	if (n == ']' - 'a' && m == ';' - 'a') {
+	  n = sz;
+	  m = sz;
+	}
+
+	/* DEBUG(DEBUG_LOADSGF,"load_sgf : Adding [%c%c]=%m\n", 'a'+n, 'a'+m, m,n); **/
+
+	if (movenum == until || (m == untilm && n == untiln))
+	{
+	  /* DEBUG(DEBUG_LOADSGF, "Move specified by -L reached\n"); **/
+	  fclose(input);
+	  return color;
+	}
+
+	if (n<board_size && m<board_size)
+	{
+	  /* commented out sgf_move_made() function call. (for -o option) **/
+	  /* sgf_move_made(m, n, color, 0); **/ /* in case we are recording with -o */ 
+	  
+	  /* updateboard(m, n, color); **/
+	  p[m][n] = color;
+	}
+
+	movenum++;
+	state=nextstate;
+	nextstate=0;
+      }
+      else {
+	fprintf(stderr,"analyze: error parsing sgf file - state=2, (c='%c'\n", c);
+	exit(1);
+      }
+      break;
+
+    case 3:
+      if (c == ']') state=1;
+      else state=0;
+      break;
+
+    case 4:
+      if (c == 'A') {
+	if ((c=getc(input)) != '[') {
+	  fprintf(stderr,"error parsing sgf file - state = 4, c='%c'\n", c);
+	  abort();
+	}
+	n=getc(input)-'0'; /* handicap game */
+	/* DEBUG(DEBUG_LOADSGF,"load_sgf : Handicap %d\n", n); **/
+	sethand(n);
+	if (sgfout) fprintf(sgfout,"HA[%d]",n);
+      }
+      state=0;
+      break;
+
+    case 5:
+      if (c == 'Z') {
+	if ((c=getc(input)) != '[') {
+	  fprintf(stderr,"error parsing sgf file - state = 4, c='%c'\n", c);
+	  abort();
+	}
+	n=getc(input)-'0';
+	if (n==1)
+	  n=10+getc(input)-'0';
+	board_size=n;
+	sz = n;
+	/* DEBUG(DEBUG_LOADSGF,"load_sgf : Board size %d\n", n); **/
+	if (sgfout) fprintf(sgfout,"SZ[%d]",n);
+	/* an "until" move was parsed assuming board size 19. Reparse */
+	goto reparse_untilstr;  /* crude, but effective ! */
+      }
+      state=0;
+      break;
+    }
+  }
+
+  /* DEBUG(DEBUG_LOADSGF, "\n\n\nEnd of load_sgf\n\n\n"); **/
+
+  fclose(input);
+
+  return OTHER_COLOR(color);
+}
+
+
+
+
+
+
