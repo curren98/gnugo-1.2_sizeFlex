@@ -333,9 +333,11 @@ reparse_untilstr:
 	m=getc(input)-'a';
 	
 	/* modification: support PASS expression like B[];/W[]; (cf: B[tt]/W[tt]) **/
-	if (n == ']' - 'a' && m == ';' - 'a') {
+	if (n == ']' - 'a') {
 	  n = sz;
 	  m = sz;
+	  ungetc(m, input);
+	  ungetc(n, input);
 	}
 
 	/* DEBUG(DEBUG_LOADSGF,"load_sgf : Adding [%c%c]=%m\n", 'a'+n, 'a'+m, m,n); **/
