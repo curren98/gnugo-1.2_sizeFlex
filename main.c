@@ -51,6 +51,23 @@ int opn[9];               /* opening pattern flag */
 
 static int load_sgf(char *file, char *untilstr);
 
+/* allocate arrays dynamic **/
+void allocateArrays(int size) {
+  int i;
+
+  p = (unsigned char **)calloc(size, sizeof(char*));
+  l = (unsigned char **)calloc(size, sizeof(char*));
+  ma = (unsigned char **)calloc(size, sizeof(char*));
+  ml = (unsigned char **)calloc(size, sizeof(char*));
+  for (i = 0; i < size; i++) {
+    p[i] = (unsigned char *)calloc(size, sizeof(char));
+    l[i] = (unsigned char *)calloc(size, sizeof(char));
+    ma[i] = (unsigned char *)calloc(size, sizeof(char));
+    ml[i] = (unsigned char *)calloc(size, sizeof(char));
+  }
+  
+  return;
+}
 
 int main(int argc,
          char *argv[])
@@ -59,23 +76,15 @@ int main(int argc,
    int i, j;
    char move[10], ans[5];
    int cont = 0;
+   int contSgf = 0;  /* flag : continue from sgf **/
    time_t tm;
    
    /* allocate arrays dynamic **/
-   /* todo: continue‚Ì‚Æ‚«‚Ígnugo.dat‚©‚çsz‚Ìvalue‚ð“Ç‚ÝŽæ‚Á‚½Œã‚Éallocate‚·‚é **/
-   p = (unsigned char **)calloc(sz, sizeof(char*));
-   l = (unsigned char **)calloc(sz, sizeof(char*));
-   ma = (unsigned char **)calloc(sz, sizeof(char*));
-   ml = (unsigned char **)calloc(sz, sizeof(char*));
-   for (i = 0; i < sz; i++) {
-     p[i] = (unsigned char *)calloc(sz, sizeof(char));
-     l[i] = (unsigned char *)calloc(sz, sizeof(char));
-     ma[i] = (unsigned char *)calloc(sz, sizeof(char));
-     ml[i] = (unsigned char *)calloc(sz, sizeof(char));
-   }
+   allocateArrays(sz);
 
-/* show instruction */
-   showinst();
+/* show instruction */ /* only if arguments are not supplied **/
+   if (argc == 1)
+     showinst();
 
    if ((fp = fopen("gnugo.dat", "r")) != NULL)  /* continue old game */
      {
@@ -102,6 +111,7 @@ int main(int argc,
    else if (strcmp(argv[1], "-l") == 0) {
      mymove = load_sgf(argv[2], NULL);
      umove = 3 - mymove;
+     contSgf = 1;
    
    
    
@@ -128,7 +138,7 @@ int main(int argc,
    uik = -1; ujk = -1;
    srand((unsigned)time(&tm));	/* start random number seed */
 
-   if (!cont)  /* new game */
+   if (!cont && !contSgf)  /* new game */
      {
 /* ask for handicap */
       printf("Number of handicap for black (0 to 17)? ");
@@ -163,6 +173,13 @@ int main(int argc,
           }
        }
     }
+
+   /* if sgf was suplied (option -l), 
+      gnugo returns next move, and quit. **/
+   if (contSgf) {
+     genmove(&i, &j);   /* computer move */
+     return;
+   }
 
    showboard();
 
@@ -337,6 +354,7 @@ reparse_untilstr:
 	  
 	  /* updateboard(m, n, color); **/
 	  p[m][n] = color;
+	  examboard(OTHER_COLOR(color));
 	}
 
 	movenum++;
@@ -379,6 +397,10 @@ reparse_untilstr:
 	  n=10+getc(input)-'0';
 	board_size=n;
 	sz = n;
+	
+	/* re-allocate arrays dynamic **/
+	allocateArrays(sz);
+
 	/* DEBUG(DEBUG_LOADSGF,"load_sgf : Board size %d\n", n); **/
 	if (sgfout) fprintf(sgfout,"SZ[%d]",n);
 	/* an "until" move was parsed assuming board size 19. Reparse */

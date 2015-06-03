@@ -114,16 +114,24 @@ void genmove(int *i,
        while ((++try < MAXTRY)
 	      && ((p[*i][*j] != EMPTY) || (lib < 2) || fioe(*i, *j)));
 
+/* change output format. (similar to gnugo 2.6 ascii mode) **/
    if (try >= MAXTRY)  /* computer pass */
      {
       pass++;
-      printf("I pass.\n");
+      /* printf("I pass.\n"); **/
+      printf("\n%s (%s) move : PASS!\n", 
+             (mymove == BLACK) ? "black" : "white",
+             (mymove == BLACK) ? "X" : "o");
       *i = -1;
     }
    else   /* find valid move */
      {
       pass = 0;      
-      printf("my move: ");
+      /* printf("my move: "); **/
+      printf("\n%s (%s) move ", 
+             (mymove == BLACK) ? "black" : "white",
+             (mymove == BLACK) ? "X" : "o");
+      
       if (*j < 8)
 	 a = *j + 65;
       else
