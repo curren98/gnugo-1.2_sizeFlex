@@ -108,13 +108,23 @@ int main(int argc,
       remove("gnugo.dat");
     }
    /* read SGF file (option -l) **/
-   else if (strcmp(argv[1], "-l") == 0) {
+   else if (argc == 3 && strcmp(argv[1], "-l") == 0) {
+     /* at first pass, read mymove. **/
      mymove = load_sgf(argv[2], NULL);
      umove = 3 - mymove;
+     
+     /* reset game state. (because at first pass, mymove/umove value was wrong, so game state is also wrong.) **/
+     mk = 0;  uk = 0;
+     play = 1;
+     pass = 0;
+     mik = -1; mjk = -1;
+     uik = -1; ujk = -1;
+     srand((unsigned)time(&tm));  /* start random number seed */
+     
+     /* second pass, read and set game state **/
+     load_sgf(argv[2], NULL);
+     
      contSgf = 1;
-   
-   
-   
    }
    else
      {
