@@ -141,12 +141,14 @@ int main(int argc,
       mk = 0;  uk = 0;
     }
 
-/* init global variables */
-   play = 1;
-   pass = 0;
-   mik = -1; mjk = -1;
-   uik = -1; ujk = -1;
-   srand((unsigned)time(&tm));	/* start random number seed */
+/* init global variables */ /* if not continue from sgf. **/
+   if (!contSgf) {
+     play = 1;
+     pass = 0;
+     mik = -1; mjk = -1;
+     uik = -1; ujk = -1;
+     srand((unsigned)time(&tm));	/* start random number seed */
+   }
 
    if (!cont && !contSgf)  /* new game */
      {
