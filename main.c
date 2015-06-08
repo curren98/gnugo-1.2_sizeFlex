@@ -334,10 +334,11 @@ reparse_untilstr:
 	
 	/* modification: support PASS expression like B[];/W[]; (cf: B[tt]/W[tt]) **/
 	if (n == ']' - 'a') {
+	  ungetc(m + 'a', input);
+	  ungetc(n + 'a', input);
 	  n = sz;
 	  m = sz;
-	  ungetc(m, input);
-	  ungetc(n, input);
+	  examboard(OTHER_COLOR(color));
 	}
 
 	/* DEBUG(DEBUG_LOADSGF,"load_sgf : Adding [%c%c]=%m\n", 'a'+n, 'a'+m, m,n); **/
